@@ -3,16 +3,14 @@ import os
 from encrypted.generate_context import restore_HE_from
 import numpy as np
 from array_utils import encrypt_array, decrypt_array
-from activations import relu_deriv, relu
+from activations import relu_deriv, relu, sigmoid, sigmoid_deriv
 from maths import sqrt, reciprocal, inverse_root
 from losses import binary_crossentropy
 
-HE = restore_HE_from("encrypted/default")
+HE = restore_HE_from("encrypted/keypack")
 
-
-
-fun_plain = lambda x: np.reciprocal(np.sqrt(x))
-fun_enc = inverse_root
+fun_plain = lambda x: 1 * (x>0)
+fun_enc = relu_deriv
 
 np.random.seed(543)
 exact = np.random.rand(15)
@@ -31,4 +29,3 @@ for e in zip(exact, dec_res, res):
 
 def binary_ce(p, y):
     return (p - y) / (p - p ** 2)
-

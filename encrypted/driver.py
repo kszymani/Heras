@@ -5,19 +5,19 @@ from layers import Dense, Activation
 from activations import *
 from losses import *
 
-HE = restore_HE_from("default")
+HE = restore_HE_from("keypack")
 
-network = Network()
+network = Network(seed=345)
 
 x_train = np.array([[[0.0, 0.0]], [[1.0, 0.0]], [[0.0, 0.1]], [[1.0, 1.0]]])
 y_train = np.array([[[0.0]], [[1.0]], [[1.0]], [[0.0]]])
-
+print("encrypting arrays")
 x_enc = encrypt_array(x_train, HE)
 y_enc = encrypt_array(y_train, HE)
 
-network.add(Dense(2, 5, HE))
+network.add(Dense(2, 3, HE))
 network.add(Activation(relu, relu_deriv))
-network.add(Dense(5, 1, HE))
+network.add(Dense(3, 1, HE))
 network.add(Activation(sigmoid, sigmoid_deriv))
 
 network.set_loss(binary_crossentropy, binary_crossentropy_deriv)

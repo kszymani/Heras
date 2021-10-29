@@ -1,12 +1,12 @@
 import os
-from Pyfhel import Pyfhel
+from Pyfhel import Pyfhel, PyCtxt
 
 """Encryption parameters"""
 m = 2 ** 15
-p = 2 ** 10 + 1
+p = 2 ** 12
 b = 3
-intDigits = 8
-fracDigits = 32
+intDigits = 32
+fracDigits = 64
 relinKeySize = 3
 
 
@@ -22,7 +22,7 @@ def generate_to_folder(folder_name):
     HE.savepublicKey(f"{folder_name}/public")
     HE.savesecretKey(f"{folder_name}/secret")
     HE.saveContext(f"{folder_name}/context")
-    HE.multDepth(max_depth=64, delta=0.5, x_y_z=(1, 10, 0.1), verbose=True)
+    HE.multDepth(max_depth=64, delta=0.5, x_y_z=(1, 0.1, 10.0), verbose=True)
 
 
 def restore_HE_from(folder_name):
@@ -35,5 +35,6 @@ def restore_HE_from(folder_name):
     return HE
 
 
-# generate_to_folder("default")
-# restore_from("default")
+if __name__ == '__main__':
+    generate_to_folder("encrypted/keypack")
+# restore_HE_from("default")

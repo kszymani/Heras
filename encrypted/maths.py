@@ -6,17 +6,15 @@ from array_utils import relinearize_array, refresh_array, decrypt_array
 
 def debugger(func):
     def wrapper(*args, **kwargs):
+        dec = decrypt_array(*args).flatten()
+        print(f"input to {func.__name__}: ", dec)
         out = func(*args, **kwargs)
-        print(f"Output from {func.__name__}: ")
-        for e in decrypt_array(out, args[1]):
-            print("%.6f", e)
+        for e in zip(dec, decrypt_array(out, args[1]).flatten()):
+            print("{:s}({:.6f}) = {:.6f}".format(func.__name__, e[0], e[1]))
         print("===================================")
         return out
+
     return wrapper
-
-
-def refresh(x, HE: Pyfhel):
-    return HE.encryptFrac(HE.decryptFrac(x))
 
 
 @debugger
@@ -52,7 +50,7 @@ def reciprocal(x, HE: Pyfhel, d=5):
 
 
 @debugger
-def inverse_root(x, HE: Pyfhel, d=4):
+def inverse_root(x, HE: Pyfhel, d=5):
     a = x + 0.5
     for i in range(d):
         sqr = a ** 2
@@ -66,17 +64,18 @@ def inverse_root(x, HE: Pyfhel, d=4):
         a = refresh_array(a, HE)
     return a
 
+
 @debugger
 def sign(x, HE: Pyfhel):
     denom = x ** 2
     relinearize_array(denom, HE)
     res = x * inverse_root(denom, HE)
-    relinearize_array(denom, HE)
+    relinearize_array(res, HE)
     return res
 
-@debugger
+
 def evaluate_poly(x, a, HE: Pyfhel):
-    result = np.zeros(x.shape)
+    result = np.zeros(x.size, dtype=PyCtxt)
     for i in range(len(a) - 1, -1, -1):
         result = (x * result) + a[i]
         relinearize_array(result, HE)
