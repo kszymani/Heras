@@ -9,10 +9,12 @@ import numpy as np
 
 
 class Network:
-    def __init__(self):
+    def __init__(self, seed=None):
         self.layers = []
         self.loss = None
         self.loss_deriv = None
+        if seed is not None:
+            np.random.seed(seed)
 
     def add(self, layer: Layer):
         self.layers.append(layer)
@@ -33,19 +35,20 @@ class Network:
         return result
 
     def fit(self, input_data, labels, HE: Pyfhel, epochs=1, lr=0.1):
-        num_samples = input_data[0]
+        num_samples = len(input_data)
         for e in range(epochs):
             err = 0
-            for s in range(len(num_samples)):
+            for s in range(num_samples):
                 data = input_data[s]
+                label = labels[s]
                 for layer in self.layers:
                     data = layer.feed_forward(data, HE)
-                err += HE.decryptFrac(self.loss(data, labels, HE))
+                err += HE.decryptFrac(self.loss(data, label, HE))
 
-                error = self.loss_deriv(data, labels, HE)
+                error = self.loss_deriv(data, label, HE)
                 for layer in reversed(self.layers):
                     error = layer.propagate_backward(error, lr, HE)
-            print(f"Error after epoch {e}/{epochs}: {err}")
+            print(f"Error after epoch {e+1}/{epochs}: {err}")
 
     def save_weights(self, folder_name, HE):
         if not os.path.exists(folder_name):
@@ -53,6 +56,6 @@ class Network:
         i = 0
         for layer in self.layers:
             if isinstance(layer, Dense):
-                np.save(f"weights{i}.npy", decrypt_array(layer.weights, HE))
-                np.save(f"bias{i}.npy", decrypt_array(layer.bias, HE))
+                np.save(f"{folder_name}/weights{i}.npy", decrypt_array(layer.weights, HE))
+                np.save(f"{folder_name}/bias{i}.npy", decrypt_array(layer.bias, HE))
                 i += 1

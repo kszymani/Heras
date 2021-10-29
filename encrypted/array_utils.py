@@ -1,19 +1,6 @@
 from Pyfhel import Pyfhel, PyCtxt
 import numpy as np
 
-BUDGET = 300
-
-
-def run_on_array(x: np.array, func, HE: Pyfhel):
-    result = np.empty(x.size, dtype=PyCtxt)
-    i = 0
-    for e in x.flatten():
-        result[i] = func(e, HE)
-        i += 1
-    if result[0].noiseBudget < BUDGET:
-        result = refresh_array(result, HE)
-    return result.reshape(x.shape)
-
 
 def encrypt_array(x: np.array, HE: Pyfhel):
     result = np.empty(x.size, dtype=PyCtxt)

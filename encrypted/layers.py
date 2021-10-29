@@ -1,4 +1,3 @@
-from Pyfhel import Pyfhel, PyCtxt, PyPtxt
 import numpy as np
 
 from array_utils import encrypt_array, relinearize_array, refresh_array
@@ -11,44 +10,42 @@ class Layer:
         self.input = None
         self.output = None
 
-    def feed_forward(self, x, HE: Pyfhel):
+    def feed_forward(self, x, HE):
         raise NotImplementedError
 
-    def propagate_backward(self, error, lr, HE: Pyfhel):
+    def propagate_backward(self, error, lr, HE):
         raise NotImplementedError
 
 
 class Dense(Layer):
-    def __init__(self, input_size, output_size, HE: Pyfhel, weights=None, bias=None, seed=None):
+    def __init__(self, input_size, output_size, HE, weights=None, bias=None):
         super().__init__()
         if weights is not None and bias is not None:
             self.weights = encrypt_array(np.load(weights), HE)
             self.bias = encrypt_array(np.load(bias), HE)
         else:
-            if seed is not None:
-                np.random.seed(seed)
             random_weights = np.random.rand(input_size, output_size) - 0.5
             random_bias = np.random.rand(1, output_size) - 0.5
             self.weights = encrypt_array(random_weights, HE)
             self.bias = encrypt_array(random_bias, HE)
 
-    def feed_forward(self, x, HE: Pyfhel):
+    def feed_forward(self, x, HE):
         self.input = x
-        output = np.dot(self.weights.T, self.input)
+        output = np.dot(self.input, self.weights)
         relinearize_array(output, HE)
         output += self.bias
 
         if output[0, 0].noiseBudget < BUDGET:
             output = refresh_array(output, HE)
-        if self.weights[0, 0].noiseBudget < BUDGET:
-            self.weights = refresh_array(self.weights, HE)
         return output
 
-    def propagate_backward(self, error, lr, HE: Pyfhel):
-        input_err = np.dot(error, self.weights.T)
+    def propagate_backward(self, output_err, lr, HE):
+        input_err = np.dot(output_err, self.weights.T)
         relinearize_array(input_err, HE)
-        self.weights -= input_err * lr
-        self.bias -= error * lr
+        weights_err = np.dot(self.input.T, output_err)
+        relinearize_array(weights_err, HE)
+        self.weights -= weights_err * lr
+        self.bias -= output_err * lr
 
         if self.weights[0, 0].noiseBudget < BUDGET:
             self.weights = refresh_array(self.weights, HE)
@@ -66,15 +63,15 @@ class Activation(Layer):
         self.activation = activation
         self.activation_deriv = activation_deriv
 
-    def feed_forward(self, x, HE: Pyfhel):
+    def feed_forward(self, x, HE):
         self.input = x
         output = self.activation(self.input, HE)
         if output[0, 0].noiseBudget < BUDGET:
             output = refresh_array(output, HE)
         return output
 
-    def propagate_backward(self, error, lr, HE: Pyfhel):
-        input_err = self.activation_deriv(self.input, HE) * error
+    def propagate_backward(self, output_err, lr, HE):
+        input_err = self.activation_deriv(self.input, HE) * output_err
         relinearize_array(input_err, HE)
         if input_err[0, 0].noiseBudget < BUDGET:
             input_err = refresh_array(input_err, HE)

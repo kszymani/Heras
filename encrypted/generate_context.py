@@ -1,7 +1,7 @@
 import os
-
 from Pyfhel import Pyfhel
 
+"""Encryption parameters"""
 m = 2 ** 15
 p = 2 ** 10 + 1
 b = 3
@@ -25,7 +25,7 @@ def generate_to_folder(folder_name):
     HE.multDepth(max_depth=64, delta=0.5, x_y_z=(1, 10, 0.1), verbose=True)
 
 
-def restore_from(folder_name):
+def restore_HE_from(folder_name):
     print("Restoring Pyfhel")
     HE = Pyfhel()
     HE.restoreContext(f"{folder_name}/context")

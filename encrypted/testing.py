@@ -1,11 +1,13 @@
-from generate_context import restore_from
+import os
+
+from encrypted.generate_context import restore_HE_from
 import numpy as np
 from array_utils import encrypt_array, decrypt_array
 from activations import relu_deriv, relu
 from maths import sqrt, reciprocal, inverse_root
 from losses import binary_crossentropy
 
-HE = restore_from("default")
+HE = restore_HE_from("encrypted/default")
 
 
 
