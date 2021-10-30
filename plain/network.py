@@ -29,7 +29,7 @@ class Network:
             for layer in self.layers:
                 output = layer.feed_forward(output)
             result.append(output)
-        return result
+        return np.array(result)
 
     def fit(self, input_data, labels, epochs=1, lr=0.1):
         num_samples = len(input_data)

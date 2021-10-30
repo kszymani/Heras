@@ -15,3 +15,11 @@ def relu(x):
 
 def relu_deriv(x):
     return 1 * (x > 0)
+
+
+def square(x):
+    return x ** 2
+
+
+def square_deriv(x):
+    return 2 * x

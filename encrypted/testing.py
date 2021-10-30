@@ -9,8 +9,8 @@ from losses import binary_crossentropy
 
 HE = restore_HE_from("encrypted/keypack")
 
-fun_plain = lambda x: 1 * (x>0)
-fun_enc = relu_deriv
+fun_plain = lambda x: np.sqrt(x)
+fun_enc = sqrt
 
 np.random.seed(543)
 exact = np.random.rand(15)

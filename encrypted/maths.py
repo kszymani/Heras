@@ -9,9 +9,16 @@ def debugger(func):
         dec = decrypt_array(*args).flatten()
         print(f"input to {func.__name__}: ", dec)
         out = func(*args, **kwargs)
+        fatal = False
         for e in zip(dec, decrypt_array(out, args[1]).flatten()):
+
             print("{:s}({:.6f}) = {:.6f}".format(func.__name__, e[0], e[1]))
+            if e[0] > 100 or e[1] > 100:
+                fatal = True
         print("===================================")
+        if fatal:
+            print("FATAL ERROR DETECTED")
+            exit(420)
         return out
 
     return wrapper
@@ -79,6 +86,9 @@ def evaluate_poly(x, a, HE: Pyfhel):
     for i in range(len(a) - 1, -1, -1):
         result = (x * result) + a[i]
         relinearize_array(result, HE)
+        if result[0,0].noiseBudget < 400:
+            print("POLY REFRESHING ARR")
+            result = refresh_array(result, HE)
     return result
 
 
