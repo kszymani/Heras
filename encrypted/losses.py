@@ -17,6 +17,5 @@ def binary_crossentropy_deriv(p, y, HE):
     inv = reciprocal(denom + p, HE)
     res = (p - y) * inv
     relinearize_array(res, HE)
-    if res[0,0].noiseBudget < 300:
-        res = refresh_array(res, HE)
+    res = refresh_array(res, HE)
     return res

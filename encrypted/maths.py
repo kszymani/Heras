@@ -11,9 +11,8 @@ def debugger(func):
         out = func(*args, **kwargs)
         fatal = False
         for e in zip(dec, decrypt_array(out, args[1]).flatten()):
-
             print("{:s}({:.6f}) = {:.6f}".format(func.__name__, e[0], e[1]))
-            if e[0] > 100 or e[1] > 100:
+            if np.abs(e[0]) > 100 or np.abs(e[1]) > 100:
                 fatal = True
         print("===================================")
         if fatal:
@@ -51,7 +50,7 @@ def reciprocal(x, HE: Pyfhel, d=5):
         a *= b + 1
         relinearize_array(a, HE)
 
-        a = refresh_array(a, HE)
+        # a = refresh_array(a, HE)
         b = refresh_array(b, HE)
     return a
 

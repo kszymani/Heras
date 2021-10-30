@@ -26,6 +26,3 @@ dec_res = decrypt_array(enc_res, HE)
 for e in zip(exact, dec_res, res):
     print(f"{fun_enc.__name__.replace('_array', '')}(%.6f) = [enc: %.6f, exact: %.6f]" % (e[0], e[1], e[2]))
 
-
-def binary_ce(p, y):
-    return (p - y) / (p - p ** 2)

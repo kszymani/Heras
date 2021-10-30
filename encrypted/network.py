@@ -53,7 +53,7 @@ class Network:
                 for layer in reversed(self.layers):
                     error = layer.propagate_backward(error, lr, HE)
                     print("error noise after layer", layer, error[0,0].noiseBudget)
-            print(f"Error after epoch {e+1}/{epochs}: {err}")
+            print(f"Error after epoch {e+1}/{epochs}: {np.round(err/num_samples, 6)}")
 
     def save_weights(self, folder_name, HE):
         if not os.path.exists(folder_name):

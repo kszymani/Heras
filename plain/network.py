@@ -45,7 +45,7 @@ class Network:
                 error = self.loss_deriv(data, label)
                 for layer in reversed(self.layers):
                     error = layer.propagate_backward(error, lr)
-            print(f"Error after epoch {e+1}/{epochs}: {err/num_samples}")
+            print(f"Error after epoch {e+1}/{epochs}: {np.round(err/num_samples, 6)}")
 
     def save_weights(self, folder_name):
         if not os.path.exists(folder_name):

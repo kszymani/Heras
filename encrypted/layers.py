@@ -26,8 +26,8 @@ class Dense(Layer):
         self.input_size = input_size
         self.output_size = output_size
         if weights is not None and bias is not None:
-            self.weights = encrypt_array(np.load(weights), HE)
-            self.bias = encrypt_array(np.load(bias), HE)
+            self.weights = encrypt_array(np.load(weights, allow_pickle=True), HE)
+            self.bias = encrypt_array(np.load(bias, allow_pickle=True), HE)
         else:
             random_weights = np.random.rand(input_size, output_size) - 0.5
             random_bias = np.random.rand(1, output_size) - 0.5
@@ -39,9 +39,7 @@ class Dense(Layer):
         output = np.dot(self.input, self.weights)
         relinearize_array(output, HE)
         output += self.bias
-        print("output noise in layer ", self, output[0, 0].noiseBudget)
-        if output[0, 0].noiseBudget < BUDGET:
-            output = refresh_array(output, HE)
+        output = refresh_array(output, HE)
         return output
 
     def propagate_backward(self, output_err, lr, HE):
@@ -52,15 +50,13 @@ class Dense(Layer):
 
         self.weights -= weights_err * lr
         self.bias -= output_err * lr
-        print("self.weights[0, 0] noise in layer ", self, self.weights)
+        print("self.weights noise in layer ", self, self.weights)
         if self.weights[0, 0].noiseBudget < BUDGET:
             self.weights = refresh_array(self.weights, HE)
-        print("self.bias[0, 0] noise in layer ", self, self.bias)
+        print("self.bias noise in layer ", self, self.bias)
         if self.bias[0, 0].noiseBudget < BUDGET:
             self.bias = refresh_array(self.bias, HE)
-        print("input_err[0, 0] noise in layer ", self, input_err)
-        if input_err[0, 0].noiseBudget < BUDGET:
-            input_err = refresh_array(input_err, HE)
+        input_err = refresh_array(input_err, HE)
         return input_err
 
 
@@ -74,22 +70,13 @@ class Activation(Layer):
         self.activation_deriv = activation_deriv
 
     def feed_forward(self, x, HE):
-        self.input = x
+        self.input = refresh_array(x, HE)
         output = self.activation(self.input, HE)
-        print("act : ", output)
-        if output[0, 0].noiseBudget < BUDGET:
-            output = refresh_array(output, HE)
         return output
 
     def propagate_backward(self, output_err, lr, HE):
-        print("output_err in activation ", output_err)
-        if output_err[0,0].noiseBudget < 300:
-            output_err = refresh_array(output_err, HE)
         r = self.activation_deriv(self.input, HE)
-        print("act deriv: ", r)
         input_err = r * output_err
         relinearize_array(input_err, HE)
-        print("input_err in activation ", input_err)
-        if input_err[0, 0].noiseBudget < BUDGET:
-            input_err = refresh_array(input_err, HE)
+        input_err = refresh_array(input_err, HE)
         return input_err
