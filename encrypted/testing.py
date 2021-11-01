@@ -5,12 +5,11 @@ import numpy as np
 from array_utils import encrypt_array, decrypt_array
 from activations import relu_deriv, relu, sigmoid, sigmoid_deriv
 from maths import sqrt, reciprocal, inverse_root
-from losses import binary_crossentropy
 
-HE = restore_HE_from("encrypted/keypack")
+HE = restore_HE_from("keypack")
 
-fun_plain = lambda x: np.sqrt(x)
-fun_enc = sqrt
+fun_plain = lambda x: np.reciprocal(x)
+fun_enc = reciprocal
 
 np.random.seed(543)
 exact = np.random.rand(15)

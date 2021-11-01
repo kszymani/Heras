@@ -1,6 +1,7 @@
+import numpy as np
 from Pyfhel import Pyfhel, PyCtxt
 from array_utils import relinearize_array, refresh_array
-from maths import sign, evaluate_poly, sqrt, debugger
+from maths import sign, evaluate_poly, sqrt, debugger, exp, reciprocal
 
 
 @debugger
@@ -41,4 +42,22 @@ def square(x, HE):
 @debugger
 def square_deriv(x, HE):
     res = x * 2.0
+    return res
+
+@debugger
+def softmax(x, HE):
+    exps = exp(x, HE)
+    inv = reciprocal(np.sum(exps))
+    res = exps * inv
+    res = relinearize_array(res, HE)
+    res = refresh_array(res, HE)
+    return res
+
+@debugger
+def softmax_deriv(x, HE):
+    soft = softmax(x, HE)
+    outer = np.outer(soft, soft)
+    relinearize_array(outer, HE)
+    res = np.diag(soft.flatten()) - outer
+    res = refresh_array(res, HE)
     return res

@@ -3,6 +3,7 @@ import numpy as np
 global REFRESHES
 REFRESHES = 0
 
+
 def encrypt_array(x: np.array, HE: Pyfhel):
     result = np.empty(x.size, dtype=PyCtxt)
     i = 0

@@ -41,7 +41,7 @@ def sqrt(x, HE: Pyfhel, d=5):
 
 
 @debugger
-def reciprocal(x, HE: Pyfhel, d=5):
+def reciprocal(x, HE: Pyfhel, d=3):
     a = x * (-1.0) + 2.0
     b = x * (-1.0) + 1.0
     for i in range(d):
@@ -49,8 +49,8 @@ def reciprocal(x, HE: Pyfhel, d=5):
         relinearize_array(b, HE)
         a *= b + 1
         relinearize_array(a, HE)
-
-        # a = refresh_array(a, HE)
+        """because b approaches zero, it is necessary to frequently refresh the array to keep the noise as low as 
+        possible in order to prevent the noise from overflowing the value """
         b = refresh_array(b, HE)
     return a
 
@@ -85,13 +85,17 @@ def evaluate_poly(x, a, HE: Pyfhel):
     for i in range(len(a) - 1, -1, -1):
         result = (x * result) + a[i]
         relinearize_array(result, HE)
-        if result[0,0].noiseBudget < 400:
-            print("POLY REFRESHING ARR")
-            result = refresh_array(result, HE)
+    result = refresh_array(result, HE)
     return result
 
 
 @debugger
 def log(x, HE: Pyfhel):
     coeffs = [-137 / 60, 5.0, -5.0, 10 / 3, -5 / 4, 1 / 5]
+    return evaluate_poly(x, coeffs, HE)
+
+
+@debugger
+def exp(x, HE: Pyfhel):
+    coeffs = [1.0, 1.0, 1 / 2, 1 / 6, 1 / 24, 1 / 120]
     return evaluate_poly(x, coeffs, HE)

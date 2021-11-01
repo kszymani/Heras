@@ -23,3 +23,17 @@ def square(x):
 
 def square_deriv(x):
     return 2 * x
+
+
+def softmax(x):
+    exps = np.exp(x)
+    inv = np.reciprocal(np.sum(exps))
+    res = exps * inv
+    return res
+
+
+def softmax_deriv(x):
+    soft = softmax(x)
+    outer = np.outer(soft, soft)
+    res = np.diag(soft.flatten()) - outer
+    return res

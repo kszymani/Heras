@@ -18,3 +18,13 @@ def binary_crossentropy(p, y):
 def binary_crossentropy_deriv(p, y):
     res = (p - y) / (p - p ** 2)
     return res
+
+
+def categorical_crossentropy(p, y):
+    res = y * np.log(p)
+    return np.sum(res) * (-1.0)
+
+
+def categorical_crossentropy_deriv(p, y):
+    res = p - y
+    return res

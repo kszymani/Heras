@@ -1,4 +1,5 @@
 import os
+import time
 
 from Pyfhel import Pyfhel
 
@@ -36,24 +37,26 @@ class Network:
         return np.array(result)
 
     def fit(self, input_data, labels, HE: Pyfhel, epochs=1, lr=0.1):
+        from datetime import datetime
+        start_time = datetime.now()
         num_samples = len(input_data)
         for e in range(epochs):
-            print(f"Epoch {e+1}/{epochs}")
+            print(f"\n\nEpoch {e+1}/{epochs}")
             err = 0
             for s in range(num_samples):
-                print(f"Sample {s + 1}/{num_samples}")
+                print(f"\nSample {s + 1}/{num_samples}")
                 data = input_data[s]
                 label = labels[s]
                 for layer in self.layers:
                     data = layer.feed_forward(data, HE)
-                    print("data noise after layer", layer, data[0, 0].noiseBudget)
                 err += HE.decryptFrac(self.loss(data, label, HE))
 
                 error = self.loss_deriv(data, label, HE)
                 for layer in reversed(self.layers):
                     error = layer.propagate_backward(error, lr, HE)
-                    print("error noise after layer", layer, error[0,0].noiseBudget)
             print(f"Error after epoch {e+1}/{epochs}: {np.round(err/num_samples, 6)}")
+        end_time = datetime.now()
+        print('Duration: {}'.format(end_time - start_time))
 
     def save_weights(self, folder_name, HE):
         if not os.path.exists(folder_name):
