@@ -2,7 +2,7 @@ import numpy as np
 
 from array_utils import encrypt_array, relinearize_array, refresh_array, decrypt_array
 
-BUDGET = 300
+BUDGET = 70
 
 
 class Layer:
@@ -50,10 +50,10 @@ class Dense(Layer):
 
         self.weights -= weights_err * lr
         self.bias -= output_err * lr
-        print("self.weights noise in layer ", self, self.weights)
+        # print("self.weights noise in layer ", self, self.weights)
         if self.weights[0, 0].noiseBudget < BUDGET:
             self.weights = refresh_array(self.weights, HE)
-        print("self.bias noise in layer ", self, self.bias)
+        # print("self.bias noise in layer ", self, self.bias)
         if self.bias[0, 0].noiseBudget < BUDGET:
             self.bias = refresh_array(self.bias, HE)
         input_err = refresh_array(input_err, HE)

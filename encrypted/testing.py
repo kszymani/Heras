@@ -6,7 +6,7 @@ from array_utils import encrypt_array, decrypt_array
 from activations import relu_deriv, relu, sigmoid, sigmoid_deriv
 from maths import sqrt, reciprocal, inverse_root
 
-HE = restore_HE_from("keypack")
+HE = restore_HE_from("light")
 
 fun_plain = lambda x: np.reciprocal(x)
 fun_enc = reciprocal

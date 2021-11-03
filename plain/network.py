@@ -31,6 +31,22 @@ class Network:
             result.append(output)
         return np.array(result)
 
+    def predict_sample(self, sample):
+        output = sample
+        for layer in self.layers:
+            output = layer.feed_forward(output)
+        return output
+
+    def fit_sample(self, data, label, lr):
+        for layer in self.layers:
+            data = layer.feed_forward(data)
+        err = self.loss(data, label)
+        error = self.loss_deriv(data, label)
+        for layer in reversed(self.layers):
+            error = layer.propagate_backward(error, lr)
+        return err
+
+
     def fit(self, input_data, labels, epochs=1, lr=0.1):
         num_samples = len(input_data)
         for e in range(epochs):
@@ -38,13 +54,7 @@ class Network:
             for s in range(num_samples):
                 data = input_data[s]
                 label = labels[s]
-                for layer in self.layers:
-                    data = layer.feed_forward(data)
-                err += self.loss(data, label)
-
-                error = self.loss_deriv(data, label)
-                for layer in reversed(self.layers):
-                    error = layer.propagate_backward(error, lr)
+                err += self.fit_sample(data, label, lr)
             print(f"Error after epoch {e+1}/{epochs}: {np.round(err/num_samples, 6)}")
 
     def save_weights(self, folder_name):

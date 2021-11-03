@@ -1,5 +1,4 @@
 import numpy as np
-from Pyfhel import Pyfhel, PyCtxt
 from array_utils import relinearize_array, refresh_array
 from maths import sign, evaluate_poly, sqrt, debugger, exp, reciprocal
 
@@ -19,6 +18,27 @@ def sigmoid_deriv(x, HE):
 
 
 @debugger
+def sigmoid_squared(x, HE):
+    coeffs = [1 / 2, 1 / 4, 0.0, -1 / 48, 0.0, 1 / 480]
+    res = evaluate_poly(x, coeffs, HE)
+    res = res ** 2
+    # relinearize_array(res, HE)
+    res = refresh_array(res, HE)
+    return res
+
+
+@debugger
+def sigmoid_squared_deriv(x, HE):
+    coeffs = [1 / 4, 0.0, -1 / 16, 0.0, 1 / 96]
+    sig = sigmoid(x, HE)
+    res = evaluate_poly(x, coeffs, HE)
+    res *= sig * 2.0
+    # relinearize_array(res, HE)
+    res = refresh_array(res, HE)
+    return res
+
+
+@debugger
 def relu(x, HE):
     sqr = x ** 2
     relinearize_array(sqr, HE)
@@ -34,7 +54,7 @@ def relu_deriv(x, HE):
 
 @debugger
 def square(x, HE):
-    res = x **2
+    res = x ** 2
     relinearize_array(res, HE)
     return res
 
@@ -44,6 +64,7 @@ def square_deriv(x, HE):
     res = x * 2.0
     return res
 
+
 @debugger
 def softmax(x, HE):
     exps = exp(x, HE)
@@ -52,6 +73,7 @@ def softmax(x, HE):
     res = relinearize_array(res, HE)
     res = refresh_array(res, HE)
     return res
+
 
 @debugger
 def softmax_deriv(x, HE):

@@ -6,7 +6,7 @@ from activations import *
 from losses import *
 import array_utils
 
-HE = restore_HE_from("keypack")
+HE = restore_HE_from("light")
 
 
 network = Network(seed=42069)
@@ -24,7 +24,7 @@ network.add(Activation(sigmoid, sigmoid_deriv))
 
 network.set_loss(binary_crossentropy, binary_crossentropy_deriv)
 
-network.fit(x_enc, y_enc, HE, epochs=50, lr=0.1)
+network.fit(x_enc, y_enc, HE, epochs=30, lr=0.1)
 network.save_weights("xor_weights", HE)
 out = network.predict(x_enc, HE)
 result = decrypt_array(out, HE)

@@ -2,10 +2,10 @@ import os
 from Pyfhel import Pyfhel, PyCtxt
 
 """Encryption parameters"""
-m = 2 ** 15
-p = 2 ** 12
+m = 2 ** 13
+p = 2 ** 5
 b = 3
-intDigits = 32
+intDigits = 16
 fracDigits = 64
 relinKeySize = 3
 
@@ -15,7 +15,7 @@ def generate_to_folder(folder_name):
     HE.contextGen(p=p, m=m, base=b, intDigits=intDigits, fracDigits=fracDigits)
     HE.keyGen()
     print("Generating Relin Key")
-    HE.relinKeyGen(bitCount=16, size=relinKeySize)
+    HE.relinKeyGen(bitCount=4, size=relinKeySize)
     if not os.path.exists(folder_name):
         os.makedirs(folder_name)
     HE.saverelinKey(f"{folder_name}/relin")
@@ -36,5 +36,5 @@ def restore_HE_from(folder_name):
 
 
 if __name__ == '__main__':
-    generate_to_folder("encrypted/keypack")
+    generate_to_folder("keys/extra_light")
 # restore_HE_from("default")

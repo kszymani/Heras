@@ -7,9 +7,9 @@ from array_utils import relinearize_array, refresh_array, decrypt_array
 def debugger(func):
     def wrapper(*args, **kwargs):
         dec = decrypt_array(*args).flatten()
-        print(f"input to {func.__name__}: ", dec)
         out = func(*args, **kwargs)
         fatal = False
+        print("===================================")
         for e in zip(dec, decrypt_array(out, args[1]).flatten()):
             print("{:s}({:.6f}) = {:.6f}".format(func.__name__, e[0], e[1]))
             if np.abs(e[0]) > 100 or np.abs(e[1]) > 100:
@@ -19,12 +19,11 @@ def debugger(func):
             print("FATAL ERROR DETECTED")
             exit(420)
         return out
-
     return wrapper
 
 
 @debugger
-def sqrt(x, HE: Pyfhel, d=5):
+def sqrt(x, HE: Pyfhel, d=3):
     a = x
     b = x - 1.0
     for i in range(d):
@@ -56,7 +55,7 @@ def reciprocal(x, HE: Pyfhel, d=3):
 
 
 @debugger
-def inverse_root(x, HE: Pyfhel, d=5):
+def inverse_root(x, HE: Pyfhel, d=3):
     a = x + 0.5
     for i in range(d):
         sqr = a ** 2

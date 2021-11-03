@@ -43,7 +43,7 @@ def get_mnist_data_categorical(split_ratio=0.25, seed=None, show=False):
     return np.array(x_train), np.array(y_train), np.array(x_test), np.array(y_test), input_size, np.array(test_values)
 
 
-def get_mnist_data(split_ratio=0.25, seed=None, show=False):
+def get_mnist_data(split_ratio=0.25, seed=None, show=False, divide_size_by=1):
     if seed is not None:
         random.seed(seed)
     mnist = load_digits()
@@ -62,7 +62,7 @@ def get_mnist_data(split_ratio=0.25, seed=None, show=False):
     y_train = []
     y_test = []
     test_values = []
-    for i in range(num_img):
+    for i in range(num_img // divide_size_by):
         x = []
         for r in mnist.images[i]:
             for c in r:
@@ -78,3 +78,7 @@ def get_mnist_data(split_ratio=0.25, seed=None, show=False):
     input_size = len(x_train[0][0])
     print("Train images: ", len(x_train), "Test images: ", len(x_test), "Split ratio: ", split_ratio)
     return np.array(x_train), np.array(y_train), np.array(x_test), np.array(y_test), input_size, np.array(test_values)
+
+
+if __name__ == '__main__':
+    get_mnist_data(show=True)

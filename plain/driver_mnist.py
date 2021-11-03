@@ -8,9 +8,9 @@ x_train, y_train, x_test, y_test, input_size, test_values = get_mnist_data(seed=
 
 network = Network(seed=5678)
 
-network.add(Dense(input_size, 10))
+network.add(Dense(input_size, 5))
 network.add(Activation(square, square_deriv))
-network.add(Dense(10, 1))
+network.add(Dense(5, 1))
 network.add(Activation(sigmoid, sigmoid_deriv))
 network.set_loss(binary_crossentropy, binary_crossentropy_deriv)
 

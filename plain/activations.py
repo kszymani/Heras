@@ -9,6 +9,14 @@ def sigmoid_deriv(x):
     return sigmoid(x) * sigmoid(1 - x)
 
 
+def sigmoid_squared(x):
+    return sigmoid(x) ** 2
+
+
+def sigmoid_squared_deriv(x):
+    return 2*np.exp(-x)/(1+np.exp(-x))**3
+
+
 def relu(x):
     return x * (x > 0)
 
