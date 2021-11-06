@@ -5,14 +5,14 @@ from maths import sign, evaluate_poly, sqrt, debugger, exp, reciprocal
 
 @debugger
 def sigmoid(x, HE):
-    coeffs = [1 / 2, 1 / 4, 0.0, -1 / 48, 0.0, 1 / 480]
+    coeffs = [1 / 2, 1 / 4, 0.0, -1 / 48, 0.0, 1 / 480, 0.0, -17/80640]
     res = evaluate_poly(x, coeffs, HE)
     return res
 
 
 @debugger
 def sigmoid_deriv(x, HE):
-    coeffs = [1 / 4, 0.0, -1 / 16, 0.0, 1 / 96]
+    coeffs = [1 / 4, 0.0, -1 / 16, 0.0, 1 / 96, 0.0, -17/11520]
     res = evaluate_poly(x, coeffs, HE)
     return res
 

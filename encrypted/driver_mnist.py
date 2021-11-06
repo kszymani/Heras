@@ -35,7 +35,7 @@ network.add(Dense(5, 1, HE))
 network.add(Activation(sigmoid_squared, sigmoid_squared_deriv))
 network.set_loss(binary_crossentropy, binary_crossentropy_deriv)
 
-epochs = 2
+epochs = 1
 train_size = len(x_train)
 test_size = len(x_test)
 for j in range(epochs):
@@ -47,7 +47,7 @@ for j in range(epochs):
         err = network.fit_sample(x_enc, y_enc, HE, lr=0.1)
         print("Loss ", HE.decryptFrac(err))
 
-network.save_weights("mnist_wieghts", HE)
+network.save_weights("mnist_weights", HE)
 
 correct_preds = 0
 preds = 0
