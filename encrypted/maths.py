@@ -9,15 +9,15 @@ def debugger(func):
         dec = decrypt_array(*args).flatten()
         out = func(*args, **kwargs)
         fatal = False
-        print("===================================")
-        for e in zip(dec, decrypt_array(out, args[1]).flatten()):
-            print("{:s}({:.6f}) = {:.6f}".format(func.__name__, e[0], e[1]))
-            if np.abs(e[0]) > 100 or np.abs(e[1]) > 100:
-                fatal = True
-        print("===================================")
-        if fatal:
-            print("FATAL ERROR DETECTED")
-            exit(420)
+        # print("===================================")
+        # for e in zip(dec, decrypt_array(out, args[1]).flatten()):
+        #     print("{:s}({:.6f}) = {:.6f}".format(func.__name__, e[0], e[1]))
+        #     if np.abs(e[0]) > 100 or np.abs(e[1]) > 100:
+        #         fatal = True
+        # print("===================================")
+        # if fatal:
+        #     print("FATAL ERROR DETECTED")
+        #     exit(420)
         return out
     return wrapper
 

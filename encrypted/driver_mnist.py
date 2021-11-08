@@ -1,7 +1,7 @@
 import os
 
 from encrypted.generate_context import restore_HE_from
-from encrypted.array_utils import decrypt_array, encrypt_array
+from encrypted.array_utils import encrypt_array
 from network import Network
 from layers import Dense, Activation
 from activations import *
@@ -23,7 +23,7 @@ def load_encrypted_image(s, folder_name):
     return arr
 
 
-HE = restore_HE_from("light")
+HE = restore_HE_from("keys/light")
 
 x_train, y_train, x_test, y_test, input_size, test_values = get_mnist_data(seed=9876)
 
@@ -47,20 +47,4 @@ for j in range(epochs):
         err = network.fit_sample(x_enc, y_enc, HE, lr=0.1)
         print("Loss ", HE.decryptFrac(err))
 
-network.save_weights("mnist_weights", HE)
-
-correct_preds = 0
-preds = 0
-for i in range(test_size):
-    x_enc = x_test[i]
-    y = y_test[i][0]
-    value = test_values[i][0]
-    pred = decrypt_array(network.predict(x_enc, HE), HE)[0]
-
-    p = np.round(pred)
-    correct = p == y
-    if correct:
-        correct_preds += 1
-    preds += 1
-    print(f"{value} is {'even' if p == 0 else 'odd'} ({'GOOD' if correct else 'BAD'}) ({np.round(pred, 4)})")
-print("Correct predictions: {}/{} ({:.2f}%)".format(correct_preds, preds, 100 * correct_preds / preds))
+network.save_weights("mnist_weights2", HE)

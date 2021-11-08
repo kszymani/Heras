@@ -39,7 +39,6 @@ class Dense(Layer):
         output = np.dot(self.input, self.weights)
         relinearize_array(output, HE)
         output += self.bias
-        output = refresh_array(output, HE)
         return output
 
     def propagate_backward(self, output_err, lr, HE):
@@ -47,16 +46,11 @@ class Dense(Layer):
         relinearize_array(input_err, HE)
         weights_err = np.dot(self.input.T, output_err)
         relinearize_array(weights_err, HE)
-
+        print(f"Noise in layer {self} w:{self.weights[0, 0].noiseBudget}, b:{self.bias[0, 0].noiseBudget}")
+        print(f"Noise in weights_err, output_err {self} w:{weights_err[0, 0].noiseBudget}, e:{output_err[0, 0].noiseBudget}")
         self.weights -= weights_err * lr
         self.bias -= output_err * lr
-        # print("self.weights noise in layer ", self, self.weights)
-        if self.weights[0, 0].noiseBudget < BUDGET:
-            self.weights = refresh_array(self.weights, HE)
-        # print("self.bias noise in layer ", self, self.bias)
-        if self.bias[0, 0].noiseBudget < BUDGET:
-            self.bias = refresh_array(self.bias, HE)
-        input_err = refresh_array(input_err, HE)
+        print(f"Noise in layer after change {self} w:{self.weights[0, 0].noiseBudget}, b:{self.bias[0, 0].noiseBudget}")
         return input_err
 
 
@@ -77,6 +71,5 @@ class Activation(Layer):
     def propagate_backward(self, output_err, lr, HE):
         r = self.activation_deriv(self.input, HE)
         input_err = r * output_err
-        relinearize_array(input_err, HE)
         input_err = refresh_array(input_err, HE)
         return input_err

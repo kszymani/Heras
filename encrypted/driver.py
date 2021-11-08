@@ -6,7 +6,7 @@ from activations import *
 from losses import *
 import array_utils
 
-HE = restore_HE_from("light")
+HE = restore_HE_from("keys/light")
 
 
 network = Network(seed=42069)
@@ -17,15 +17,15 @@ print("encrypting arrays")
 x_enc = encrypt_array(x_train, HE)
 y_enc = encrypt_array(y_train, HE)
 
-network.add(Dense(2, 4, HE))
+network.add(Dense(2, 5, HE))
 network.add(Activation(square, square_deriv))
-network.add(Dense(4, 1, HE))
+network.add(Dense(5, 1, HE))
 network.add(Activation(sigmoid, sigmoid_deriv))
 
 network.set_loss(binary_crossentropy, binary_crossentropy_deriv)
 
-network.fit(x_enc, y_enc, HE, epochs=30, lr=0.1)
-network.save_weights("xor_weights", HE)
+network.fit(x_enc, y_enc, HE, epochs=10, lr=0.1)
+network.save_weights("xor_weights2", HE)
 out = network.predict(x_enc, HE)
 result = decrypt_array(out, HE)
 print(result)

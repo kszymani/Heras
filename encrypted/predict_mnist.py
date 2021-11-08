@@ -8,7 +8,7 @@ from activations import *
 from losses import *
 from plain.datasets import get_mnist_data
 
-HE = restore_HE_from("light")
+HE = restore_HE_from("keys/light")
 
 x_train, y_train, x_test, y_test, input_size, test_values = get_mnist_data(seed=9876)
 

@@ -30,8 +30,8 @@ def relinearize_array(x: np.array, HE: Pyfhel):
 
 def refresh_array(x: np.array, HE: Pyfhel):
     global REFRESHES
-    # print(f"refreshing array [{x.size}] noise:", x[0,0].noiseBudget)
-    # REFRESHES += x.size
+    REFRESHES += x.size
+    print(f"refreshing array [{x.size}] noise:", x[0, 0].noiseBudget, ", total refreshes: ", REFRESHES)
     return encrypt_array(decrypt_array(x, HE), HE)
 
 

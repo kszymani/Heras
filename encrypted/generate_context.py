@@ -1,5 +1,6 @@
 import os
-from Pyfhel import Pyfhel, PyCtxt
+
+from Pyfhel import Pyfhel
 
 """Encryption parameters"""
 m = 2 ** 13
@@ -37,4 +38,3 @@ def restore_HE_from(folder_name):
 
 if __name__ == '__main__':
     generate_to_folder("keys/extra_light")
-# restore_HE_from("default")

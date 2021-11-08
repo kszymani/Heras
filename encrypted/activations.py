@@ -19,22 +19,19 @@ def sigmoid_deriv(x, HE):
 
 @debugger
 def sigmoid_squared(x, HE):
-    coeffs = [1 / 2, 1 / 4, 0.0, -1 / 48, 0.0, 1 / 480]
-    res = evaluate_poly(x, coeffs, HE)
+    res = sigmoid(x, HE)
     res = res ** 2
-    # relinearize_array(res, HE)
-    res = refresh_array(res, HE)
+    relinearize_array(res, HE)
     return res
 
 
 @debugger
 def sigmoid_squared_deriv(x, HE):
-    coeffs = [1 / 4, 0.0, -1 / 16, 0.0, 1 / 96]
     sig = sigmoid(x, HE)
-    res = evaluate_poly(x, coeffs, HE)
+    res = sigmoid_deriv(x, HE)
     res *= sig * 2.0
-    # relinearize_array(res, HE)
-    res = refresh_array(res, HE)
+    # res = refresh_array(der, HE)
+    relinearize_array(res, HE)
     return res
 
 

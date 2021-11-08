@@ -15,8 +15,8 @@ def binary_crossentropy_deriv(p, y, HE):
     relinearize_array(denom, HE)
     inv = reciprocal(p - denom, HE)
     res = (p - y) * inv
-    # relinearize_array(res, HE)
-    res = refresh_array(res, HE)
+    relinearize_array(res, HE)
+    # res = refresh_array(res, HE)
     return res
 
 
