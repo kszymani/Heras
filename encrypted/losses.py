@@ -1,7 +1,7 @@
 import numpy as np
 
-from array_utils import relinearize_array, refresh_array
-from maths import log, reciprocal
+from encrypted.array_utils import relinearize_array, refresh_array
+from encrypted.maths import log, reciprocal
 
 
 def binary_crossentropy(p, y, HE):

@@ -2,9 +2,9 @@ import os
 
 from encrypted.generate_context import restore_HE_from
 import numpy as np
-from array_utils import encrypt_array, decrypt_array
-from activations import *
-from maths import sqrt, reciprocal, inverse_root
+from encrypted.array_utils import encrypt_array, decrypt_array
+from encrypted.activations import *
+from encrypted.maths import sqrt, reciprocal, inverse_root
 
 HE = restore_HE_from("light")
 

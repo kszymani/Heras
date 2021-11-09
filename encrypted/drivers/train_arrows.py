@@ -1,34 +1,17 @@
-import os
-
 from encrypted.generate_context import restore_HE_from
 from encrypted.array_utils import encrypt_array
-from network import Network
-from layers import Dense, Activation
-from activations import *
-from losses import *
-from plain.datasets import get_mnist_data
+from encrypted.network import Network
+from encrypted.layers import Dense, Activation
+from encrypted.activations import *
+from encrypted.losses import *
+from datasets import get_arrows
 
+HE = restore_HE_from("../keys/light")
 
-def save_encrypted_images(samples, folder_name, HE):
-    if not os.path.exists(folder_name):
-        os.makedirs(folder_name)
-    for s in range(len(samples)):
-        img = samples[s]
-        enc = encrypt_array(img, HE)
-        np.save("{}/{}.npy".format(folder_name, s), enc)
-
-
-def load_encrypted_image(s, folder_name):
-    arr = np.load("{}/{}.npy".format(folder_name, s), allow_pickle=True)
-    return arr
-
-
-HE = restore_HE_from("keys/light")
-
-x_train, y_train, x_test, y_test, input_size, test_values = get_mnist_data(seed=9876)
+x_train, y_train, x_test, y_test, input_size = get_arrows(size=(8, 8), show=False)
 
 print("Initializing network")
-network = Network(seed=5678)
+network = Network(seed=42069)
 network.add(Dense(input_size, 5, HE))
 network.add(Activation(square, square_deriv))
 network.add(Dense(5, 1, HE))
@@ -47,4 +30,4 @@ for j in range(epochs):
         err = network.fit_sample(x_enc, y_enc, HE, lr=0.1)
         print("Loss ", HE.decryptFrac(err))
 
-network.save_weights("mnist_weights2", HE)
+network.save_weights("arrow_weights", HE)

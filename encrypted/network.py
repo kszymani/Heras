@@ -3,8 +3,8 @@ from datetime import datetime
 
 from Pyfhel import Pyfhel
 
-from array_utils import decrypt_array
-from layers import Layer, Dense
+from encrypted.array_utils import decrypt_array
+from encrypted.layers import Layer, Dense
 
 import numpy as np
 

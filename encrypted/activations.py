@@ -1,6 +1,6 @@
 import numpy as np
-from array_utils import relinearize_array, refresh_array
-from maths import sign, evaluate_poly, sqrt, debugger, exp, reciprocal
+from encrypted.array_utils import relinearize_array, refresh_array
+from encrypted.maths import sign, evaluate_poly, sqrt, debugger, exp, reciprocal
 
 
 @debugger

@@ -1,8 +1,6 @@
 import numpy as np
 
-from array_utils import encrypt_array, relinearize_array, refresh_array, decrypt_array
-
-BUDGET = 70
+from encrypted.array_utils import encrypt_array, relinearize_array, refresh_array, decrypt_array
 
 
 class Layer:

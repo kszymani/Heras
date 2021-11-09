@@ -1,7 +1,7 @@
 from Pyfhel import Pyfhel, PyCtxt
 import numpy as np
 
-from array_utils import relinearize_array, refresh_array, decrypt_array
+from encrypted.array_utils import relinearize_array, refresh_array, decrypt_array
 
 
 def debugger(func):
