@@ -82,3 +82,4 @@ def get_mnist_data(split_ratio=0.25, seed=None, show=False, divide_size_by=1):
 
 if __name__ == '__main__':
     get_arrows()
+    # get_mnist_data(show=True)

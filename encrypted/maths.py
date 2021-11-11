@@ -3,21 +3,24 @@ import numpy as np
 
 from encrypted.array_utils import relinearize_array, refresh_array, decrypt_array
 
+DEBUG = True
+
 
 def debugger(func):
     def wrapper(*args, **kwargs):
         dec = decrypt_array(*args).flatten()
         out = func(*args, **kwargs)
-        fatal = False
-        # print("===================================")
-        # for e in zip(dec, decrypt_array(out, args[1]).flatten()):
-        #     print("{:s}({:.6f}) = {:.6f}".format(func.__name__, e[0], e[1]))
-        #     if np.abs(e[0]) > 100 or np.abs(e[1]) > 100:
-        #         fatal = True
-        # print("===================================")
-        # if fatal:
-        #     print("FATAL ERROR DETECTED")
-        #     exit(420)
+        if DEBUG:
+            fatal = False
+            print("===================================")
+            for e in zip(dec, decrypt_array(out, args[1]).flatten()):
+                print("{:s}({:.6f}) = {:.6f}".format(func.__name__, e[0], e[1]))
+                if np.abs(e[0]) > 100 or np.abs(e[1]) > 100:
+                    fatal = True
+            print("===================================")
+            if fatal:
+                print("FATAL ERROR DETECTED")
+                # exit(420)
         return out
     return wrapper
 
@@ -65,7 +68,7 @@ def inverse_root(x, HE: Pyfhel, d=3):
         b *= -0.5
         b += 1.5
         a *= b
-        relinearize_array(a, HE)
+        # relinearize_array(a, HE)
         a = refresh_array(a, HE)
     return a
 
@@ -74,7 +77,7 @@ def inverse_root(x, HE: Pyfhel, d=3):
 def sign(x, HE: Pyfhel):
     denom = x ** 2
     relinearize_array(denom, HE)
-    res = x * inverse_root(denom, HE)
+    res = x * reciprocal(sqrt(denom, HE), HE)
     relinearize_array(res, HE)
     return res
 

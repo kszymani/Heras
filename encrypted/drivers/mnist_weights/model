@@ -1,0 +1,5 @@
+Dense(64,5)
+Activation(square, square_deriv)
+Dense(5, 1)
+Activation(sigmoid_squared, sigmoid_squared_deriv))
+Loss(binary_crossentropy, binary_crossentropy_deriv)
