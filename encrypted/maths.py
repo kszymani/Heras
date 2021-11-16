@@ -20,7 +20,7 @@ def debugger(func):
             print("===================================")
             if fatal:
                 print("FATAL ERROR DETECTED")
-                # exit(420)
+                exit(420)
         return out
     return wrapper
 
@@ -44,6 +44,7 @@ def sqrt(x, HE: Pyfhel, d=3):
 
 @debugger
 def reciprocal(x, HE: Pyfhel, d=3):
+    """Intended for smaller inputs x in (0, 1)"""
     a = x * (-1.0) + 2.0
     b = x * (-1.0) + 1.0
     for i in range(d):
@@ -99,5 +100,5 @@ def log(x, HE: Pyfhel):
 
 @debugger
 def exp(x, HE: Pyfhel):
-    coeffs = [1.0, 1.0, 1 / 2, 1 / 6, 1 / 24, 1 / 120]
+    coeffs = [1.0, 1.0, 1 / 2, 1 / 6, 1 / 24, 1 / 120, 1 / 720]
     return evaluate_poly(x, coeffs, HE)

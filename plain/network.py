@@ -51,7 +51,9 @@ class Network:
         num_samples = len(input_data)
         for e in range(epochs):
             err = 0
+            print("Epoch {}/{}".format(e+1, epochs))
             for s in range(num_samples):
+                # print("Sample {}/{}".format(s+1, num_samples))
                 data = input_data[s]
                 label = labels[s]
                 err += self.fit_sample(data, label, lr)

@@ -7,7 +7,8 @@ def mse(p, y):
 
 
 def mse_deriv(p, y):
-    return 2 / y.size * (y - p)
+    res = 2 / y.size * (y - p)
+    return res
 
 
 def binary_crossentropy(p, y):

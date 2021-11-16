@@ -8,20 +8,16 @@ from datasets import get_arrows
 
 HE = restore_HE_from("../keys/light")
 
-x_train, y_train, x_test, y_test, input_size = get_arrows(size=(8, 8), show=False)
-x_train = x_train[:145]
-y_train = y_train[:145]
-
-x_test = y_test[:72]
-y_test = y_test[:72]
-
+x_train, y_train, x_test, y_test, input_size = get_arrows(size=(12, 12), show=False)
+x_train = x_train[:400]
+y_train = y_train[:400]
 
 print("Initializing network")
 network = Network(seed=248263)
 network.add(Dense(input_size, 10, HE))
-network.add(Activation(square, square_deriv))
+network.add(Activation(relu_client, relu_client_deriv))
 network.add(Dense(10, 5, HE))
-network.add(Activation(square, square_deriv))
+network.add(Activation(relu_client, relu_client_deriv))
 network.add(Dense(5, 1, HE))
 network.add(Activation(sigmoid, sigmoid_deriv))
 network.set_loss(binary_crossentropy, binary_crossentropy_deriv)

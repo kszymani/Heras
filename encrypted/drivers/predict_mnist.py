@@ -1,5 +1,3 @@
-import os
-
 from encrypted.generate_context import restore_HE_from
 from encrypted.array_utils import decrypt_array, encrypt_array
 from encrypted.network import Network

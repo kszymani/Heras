@@ -15,7 +15,7 @@ y_train = y_train[:145]
 x_test = x_test[:72]
 y_test = y_test[:72]
 
-
+assert False
 print("Initializing network")
 network = Network(seed=248263)
 network.add(Dense(input_size, 10, HE, weights='arrow_weights/weights0.npy', bias='arrow_weights/bias0.npy'))

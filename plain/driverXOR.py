@@ -1,8 +1,9 @@
 
-from network import Network
-from layers import Dense, Activation
-from activations import *
-from losses import *
+from datasets import get_mnist_data, get_mnist_data_categorical
+from plain.network import Network
+from plain.layers import Dense, Activation
+from plain.activations import *
+from plain.losses import *
 
 
 network = Network(seed=42069)
