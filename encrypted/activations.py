@@ -1,6 +1,6 @@
-import numpy as np
+
 from encrypted.array_utils import relinearize_array, refresh_array, encrypt_array, decrypt_array
-from encrypted.maths import sign, evaluate_poly, sqrt, debugger, exp, reciprocal
+from encrypted.maths import *
 
 
 @debugger
@@ -39,7 +39,7 @@ def sigmoid_squared_deriv(x, HE):
 def relu(x, HE):
     sqr = x ** 2
     relinearize_array(sqr, HE)
-    res = (x + sqrt(sqr, HE)) / 2.0
+    res = (x + sqrt_taylor(sqr, HE)) / 2.0
     return res
 
 
@@ -73,24 +73,4 @@ def square(x, HE):
 @debugger
 def square_deriv(x, HE):
     res = x * 2.0
-    return res
-
-
-@debugger
-def softmax(x, HE):
-    exps = exp(x, HE)
-    inv = reciprocal(np.sum(exps))
-    res = exps * inv
-    res = relinearize_array(res, HE)
-    res = refresh_array(res, HE)
-    return res
-
-
-@debugger
-def softmax_deriv(x, HE):
-    soft = softmax(x, HE)
-    outer = np.outer(soft, soft)
-    relinearize_array(outer, HE)
-    res = np.diag(soft.flatten()) - outer
-    res = refresh_array(res, HE)
     return res

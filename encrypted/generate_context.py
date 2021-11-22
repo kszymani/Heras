@@ -4,7 +4,7 @@ from Pyfhel import Pyfhel
 
 """Encryption parameters"""
 m = 2 ** 13
-p = 2 ** 5
+p = 2 ** 10
 b = 3
 intDigits = 16
 fracDigits = 64
@@ -37,4 +37,4 @@ def restore_HE_from(folder_name):
 
 
 if __name__ == '__main__':
-    generate_to_folder("keys/extra_light")
+    generate_to_folder("keys/light2")

@@ -1,18 +1,17 @@
 import numpy as np
 
-from encrypted.array_utils import encrypt_array, relinearize_array, refresh_array, decrypt_array
+from encrypted.array_utils import encrypt_array, relinearize_array, refresh_array
 
 
 class Layer:
-    def __init__(self, ):
+    def __init__(self):
         self.input = None
-        self.output = None
 
     def feed_forward(self, x, HE):
-        raise NotImplementedError
+        pass
 
     def propagate_backward(self, error, lr, HE):
-        raise NotImplementedError
+        pass
 
 
 class Dense(Layer):

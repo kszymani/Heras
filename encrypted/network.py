@@ -11,6 +11,7 @@ import numpy as np
 
 class Network:
     def __init__(self, seed=None):
+        print("Building network")
         self.layers = []
         self.loss = None
         self.loss_deriv = None
@@ -47,12 +48,12 @@ class Network:
 
     def fit_sample(self, sample, target, HE: Pyfhel, lr):
         start_time = datetime.now()
-        data = sample
+        output = sample
         for layer in self.layers:
-            data = layer.feed_forward(data, HE)
-        err = self.loss(data, target, HE)
+            output = layer.feed_forward(output, HE)
+        err = self.loss(output, target, HE)
 
-        error = self.loss_deriv(data, target, HE)
+        error = self.loss_deriv(output, target, HE)
         for layer in reversed(self.layers):
             error = layer.propagate_backward(error, lr, HE)
         end_time = datetime.now()

@@ -6,7 +6,7 @@ from encrypted.network import Network
 from encrypted.layers import Dense, Activation
 from encrypted.activations import *
 from encrypted.losses import *
-from plain.datasets import get_mnist_data
+from datasets import get_mnist_data
 
 
 def save_encrypted_images(samples, folder_name, HE):
