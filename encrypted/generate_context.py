@@ -37,4 +37,4 @@ def restore_HE_from(folder_name):
 
 
 if __name__ == '__main__':
-    generate_to_folder("keys/light2")
+    generate_to_folder("keys/light")

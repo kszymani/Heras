@@ -64,7 +64,7 @@ class Activation(Layer):
         return output
 
     def propagate_backward(self, output_err, lr, HE):
-        r = self.activation_deriv(self.input, HE)
-        input_err = r * output_err
+        deriv = self.activation_deriv(self.input, HE)
+        input_err = deriv * output_err
         input_err = refresh_array(input_err, HE)
         return input_err

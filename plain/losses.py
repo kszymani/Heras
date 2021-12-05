@@ -1,4 +1,5 @@
 import numpy as np
+from scipy.special import xlogy
 
 
 def mse(p, y):
@@ -12,7 +13,8 @@ def mse_deriv(p, y):
 
 
 def binary_crossentropy(p, y):
-    res = y * np.log(p) + (1.0 - y) * np.log(1.0 - p)
+    # res = y * np.log(p) + (1.0 - y) * np.log(1.0 - p)
+    res = xlogy(y, p) + xlogy(1-y, 1-p)
     return np.sum(res) / -y.size
 
 

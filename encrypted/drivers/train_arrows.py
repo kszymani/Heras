@@ -34,7 +34,7 @@ for j in range(epochs):
         err = network.fit_sample(x_enc, y_enc, HE, lr=0.1)
         print("Loss ", HE.decryptFrac(err))
 
-network.save_weights("arrow_weights", HE)
+network.save_weights_plain("arrow_weights", HE)
 
 test_size = len(x_test)
 

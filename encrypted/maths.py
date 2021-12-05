@@ -47,7 +47,6 @@ def sqrt(x, HE: Pyfhel, d=3):
 
 @debugger
 def reciprocal(x, HE: Pyfhel, d=4):
-    """Intended for smaller inputs x in (0, 2)"""
     a = x * (-1.0) + 2.0
     b = x * (-1.0) + 1.0
     for i in range(d):
@@ -55,8 +54,6 @@ def reciprocal(x, HE: Pyfhel, d=4):
         relinearize_array(b, HE)
         a *= b + 1
         relinearize_array(a, HE)
-        """because b approaches zero, it is necessary to frequently refresh the array to keep the noise as low as 
-        possible in order to prevent it from overflowing the value """
         b = refresh_array(b, HE)
     return a
 
@@ -72,7 +69,6 @@ def inverse_root(x, HE: Pyfhel, d=3):
         b *= -0.5
         b += 1.5
         a *= b
-        # relinearize_array(a, HE)
         a = refresh_array(a, HE)
     return a
 
@@ -88,11 +84,9 @@ def sign(x, HE: Pyfhel):
 
 def evaluate_poly(x, a, HE: Pyfhel):
     result = np.zeros(x.size, dtype=PyCtxt)
-    for i in range(len(a) - 1, -1, -1):
+    for i in reversed(range(len(a))):
         result = (x * result) + a[i]
         relinearize_array(result, HE)
-        if i == len(a) // 2:
-            result = refresh_array(result, HE)
     result = refresh_array(result, HE)
     return result
 
@@ -118,7 +112,7 @@ def inverse_sqrt_taylor(x, HE):
 
 @debugger
 def log(x, HE: Pyfhel):
-    coeffs = [-(363 / 140), 7, - 21 / 2, 35 / 3, - 35 / 4, 21 / 5, - 7 / 6, + 1 / 7]
+    coeffs = [-(363 / 140), 7, - 21 / 2, 35 / 3, - 35 / 4, 21 / 5, - 7 / 6,  1 / 7]
     return evaluate_poly(x, coeffs, HE)
 
 

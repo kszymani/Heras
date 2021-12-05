@@ -1,4 +1,3 @@
-
 from encrypted.array_utils import relinearize_array, refresh_array, encrypt_array, decrypt_array
 from encrypted.maths import *
 
@@ -15,6 +14,21 @@ def sigmoid_deriv(x, HE):
     coeffs = [1 / 4, 0.0, -1 / 16, 0.0, 1 / 96, 0.0, -17 / 11520]
     res = evaluate_poly(x, coeffs, HE)
     return res
+
+
+@debugger
+def sigmoid_scaled(x, HE):  # alpha = 1/3
+    coeffs = [1 / 2, 1 / 12, 0, -1 / 1296, 0, 1 / 116640, 0, -17 / 176359680]
+    res = evaluate_poly(x, coeffs, HE)
+    return res
+
+
+@debugger
+def sigmoid_scaled_deriv(x, HE):
+    coeffs = [1/12, 0, -1/432, 0, 1/23328, 0, -17/25194240]
+    res = evaluate_poly(x, coeffs, HE)
+    return res
+
 
 
 @debugger
@@ -74,3 +88,15 @@ def square(x, HE):
 def square_deriv(x, HE):
     res = x * 2.0
     return res
+
+
+@debugger
+def polynomial(x, HE):
+    res = x ** 2 + x
+    relinearize_array(res, HE)
+    return res
+
+
+@debugger
+def polynomial_deriv(x, HE):
+    return x * 2.0 + 1.0

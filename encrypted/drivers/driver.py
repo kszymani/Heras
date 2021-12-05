@@ -25,7 +25,7 @@ network.add(Activation(sigmoid, sigmoid_deriv))
 network.set_loss(binary_crossentropy, binary_crossentropy_deriv)
 
 network.fit(x_enc, y_enc, HE, epochs=10, lr=0.1)
-network.save_weights("xor_weights2", HE)
+network.save_weights_plain("xor_weights2", HE)
 out = network.predict(x_enc, HE)
 result = decrypt_array(out, HE)
 print(result)

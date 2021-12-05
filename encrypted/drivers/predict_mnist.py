@@ -8,18 +8,18 @@ from datasets import get_mnist_data
 
 HE = restore_HE_from("../keys/light")
 
-
-x_train, y_train, x_test, y_test, input_size, test_values = get_mnist_data(seed=9876)
+seed = 6079
+folder_name = "mnist_params"
+x_train, y_train, x_test, y_test, input_size, test_values = get_mnist_data(seed=seed)
 
 print("Initializing network")
-network = Network(seed=5678)
-network.add(Dense(input_size, 5, HE, weights='mnist_weights/weights0.npy', bias='mnist_weights/bias0.npy'))
-network.add(Activation(square, square_deriv))
-network.add(Dense(5, 1, HE, weights='mnist_weights/weights1.npy', bias='mnist_weights/bias1.npy'))
-network.add(Activation(sigmoid_squared, sigmoid_squared_deriv))
+network = Network(seed=seed)
+network.add(Dense(input_size, 10, HE, weights=f'{folder_name}/weights0.npy', bias=f'{folder_name}/bias0.npy'))
+network.add(Activation(polynomial, polynomial_deriv))
+network.add(Dense(10, 1, HE, weights=f'{folder_name}/weights1.npy', bias=f'{folder_name}/bias1.npy'))
+network.add(Activation(sigmoid, sigmoid_deriv))
 network.set_loss(binary_crossentropy, binary_crossentropy_deriv)
 
-train_size = len(x_train)
 test_size = len(x_test)
 
 correct_preds = 0

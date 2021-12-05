@@ -124,5 +124,5 @@ def get_mnist_data_categorical(split_ratio=0.25, seed=None, show=False, divide_s
 
 if __name__ == '__main__':
     # get_arrows()
-    _, y, _, _, _, _ = get_mnist_data_categorical(show=False)
+    get_mnist_data(seed=6079, show=False)
     # print(y)
