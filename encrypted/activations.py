@@ -44,8 +44,7 @@ def sigmoid_squared_deriv(x, HE):
     sig = sigmoid(x, HE)
     res = sigmoid_deriv(x, HE)
     res *= sig * 2.0
-    # res = refresh_array(res, HE)
-    relinearize_array(res, HE)
+    res = refresh_array(res, HE)
     return res
 
 

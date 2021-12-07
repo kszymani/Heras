@@ -9,7 +9,7 @@ from datasets import get_mnist_data
 HE = restore_HE_from("../keys/light")
 
 seed = 6079
-folder_name = "mnist_params"
+folder_name = "mnist_params1"
 x_train, y_train, x_test, y_test, input_size, test_values = get_mnist_data(seed=seed)
 
 print("Initializing network")
@@ -36,5 +36,5 @@ for i in range(test_size):
     if correct:
         correct_preds += 1
     preds += 1
-    print(f"{value} is {'even' if p == 0 else 'odd'} ({'GOOD' if correct else 'BAD'}) ({np.round(pred, 4)})")
+    print(f"{value} is {'even' if p == 0 else 'odd'} ({'GOOD' if correct else 'BAD'}) ({np.round(pred, 4)}) [Correct predictions: {correct_preds}/{preds}]")
 print("Correct predictions: {}/{} ({:.2f}%)".format(correct_preds, preds, 100 * correct_preds / preds))

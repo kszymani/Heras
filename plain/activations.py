@@ -2,10 +2,10 @@ import numpy as np
 
 
 def sigmoid_plain(x):
-    if np.any(np.abs(x) > 2.1):
-        print("out of bounds for sigmoid approximation")
-        print(x)
-        exit(69)
+    # if np.any(np.abs(x) > 2.1):
+    #     print("out of bounds for sigmoid approximation")
+    #     print(x)
+    #     exit(69)
     res = 1 / (1 + np.exp(-x))
     return res
 

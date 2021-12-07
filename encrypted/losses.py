@@ -23,7 +23,6 @@ def binary_crossentropy_deriv(p, y, HE):
 def categorical_crossentropy(p, y, HE):
     res = y * log(p)
     relinearize_array(res, HE)
-
     return np.sum(res) * (-1.0)
 
 

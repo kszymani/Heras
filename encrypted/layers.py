@@ -68,3 +68,23 @@ class Activation(Layer):
         input_err = deriv * output_err
         input_err = refresh_array(input_err, HE)
         return input_err
+
+
+class ExtendedActivation(Layer):
+    def __init__(self, activation, activation_deriv, coeffs_map, coeffs_map_deriv):
+        super().__init__()
+        self.coeffs_map = coeffs_map
+        self.coeffs_map_deriv = coeffs_map_deriv
+        self.activation = activation
+        self.activation_deriv = activation_deriv
+
+    def feed_forward(self, x, HE):
+        self.input = refresh_array(x, HE)
+        output = self.activation(self.input, self.coeffs_map, HE)
+        return output
+
+    def propagate_backward(self, output_err, lr, HE):
+        deriv = self.activation_deriv(self.input, self.coeffs_map_deriv, HE)
+        input_err = deriv * output_err
+        input_err = refresh_array(input_err, HE)
+        return input_err
