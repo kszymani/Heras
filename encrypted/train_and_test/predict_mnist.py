@@ -16,6 +16,7 @@ network = Network(seed=seed)
 network.add(Dense(input_size, 10, HE, weights=f'{folder_name}/weights0.npy', bias=f'{folder_name}/bias0.npy'))
 network.add(Activation(polynomial, polynomial_deriv))
 network.add(Dense(10, 1, HE, weights=f'{folder_name}/weights1.npy', bias=f'{folder_name}/bias1.npy'))
+# network.add(Activation(sigmoid, sigmoid_deriv))
 network.add(ExtendedActivation(sigmoid_extended, sigmoid_extended_deriv, get_map_sigmoid(HE), get_map_sigmoid_deriv(HE)))
 network.set_loss(binary_crossentropy, binary_crossentropy_deriv)
 
@@ -35,6 +36,6 @@ for i in range(test_size):
     if correct:
         correct_preds += 1
     preds += 1
-    print(f"{value} is {'even' if p == 0 else 'odd'} ({'GOOD' if correct else 'BAD'}) ({np.round(pred, 4)}) [Correct predictions: {correct_preds}/{preds}]")
+    print(f"{value} is {'even' if p == 0 else 'odd'} ({'GOOD' if correct else 'BAD'}) ({np.round(pred, 4)}) [Correct "
+          f"predictions: {correct_preds}/{preds}]")
 print("Correct predictions: {}/{} ({:.2f}%)".format(correct_preds, preds, 100 * correct_preds / preds))
-# 224/451 (49.67%) e2

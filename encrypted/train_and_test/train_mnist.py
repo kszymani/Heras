@@ -20,9 +20,9 @@ x_train, y_train, x_test, y_test, input_size, test_values = get_mnist_data_binar
 
 print("Initializing network with seed = ", seed)
 network = Network(seed=seed)
-network.add(Dense(input_size, 10, HE,  weights=f'{folder_name}/weights0.npy', bias=f'{folder_name}/bias0.npy'))
+network.add(Dense(input_size, 10, HE))
 network.add(Activation(polynomial, polynomial_deriv))
-network.add(Dense(10, 1, HE, weights=f'{folder_name}/weights1.npy', bias=f'{folder_name}/bias1.npy'))
+network.add(Dense(10, 1, HE))
 # network.add(Activation(sigmoid, sigmoid_deriv))
 network.add(ExtendedActivation(sigmoid_extended, sigmoid_extended_deriv, get_map_sigmoid(HE), get_map_sigmoid_deriv(HE)))
 network.set_loss(binary_crossentropy, binary_crossentropy_deriv)
