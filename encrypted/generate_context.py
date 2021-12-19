@@ -1,8 +1,12 @@
-import os
+"""
+Kod generuje instancję kryptosystemu CKKS, jako obiekt Pyfhel.
+Zapisuje kontekst i klucze do pliów w celu szybszego tworzenia obiektu.
+"""
 
+import os
 from Pyfhel import Pyfhel
 
-"""Encryption parameters"""
+"""Parametry szyfrowania"""
 m = 2 ** 13
 p = 2 ** 10
 b = 3

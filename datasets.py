@@ -47,7 +47,7 @@ def get_arrows(size=(12, 12), show=True):
     return np.array(resized_train), train_labels, np.array(resized_test), test_labels, size[0] * size[1]
 
 
-def get_mnist_data(split_ratio=0.25, seed=None, show=False, divide_size_by=1):
+def get_mnist_data(split_ratio=0.25, seed=None, show=False):
     if seed is not None:
         random.seed(seed)
     mnist = load_digits()
@@ -66,7 +66,7 @@ def get_mnist_data(split_ratio=0.25, seed=None, show=False, divide_size_by=1):
     y_train = []
     y_test = []
     test_values = []
-    for i in range(num_img // divide_size_by):
+    for i in range(num_img):
         x = []
         for r in mnist.images[i]:
             for c in r:
@@ -84,7 +84,7 @@ def get_mnist_data(split_ratio=0.25, seed=None, show=False, divide_size_by=1):
     return np.array(x_train), np.array(y_train), np.array(x_test), np.array(y_test), input_size, np.array(test_values)
 
 
-def get_mnist_data_categorical(split_ratio=0.25, seed=None, show=False, divide_size_by=1):
+def get_mnist_data_categorical(split_ratio=0.25, seed=None, show=False):
     if seed is not None:
         random.seed(seed)
     mnist = load_digits()
@@ -103,7 +103,7 @@ def get_mnist_data_categorical(split_ratio=0.25, seed=None, show=False, divide_s
     y_train = []
     y_test = []
     test_values = []
-    for i in range(num_img // divide_size_by):
+    for i in range(num_img):
         x = []
         for r in mnist.images[i]:
             for c in r:
@@ -121,8 +121,3 @@ def get_mnist_data_categorical(split_ratio=0.25, seed=None, show=False, divide_s
     print("Train images: ", len(x_train), "Test images: ", len(x_test), "Split ratio: ", split_ratio)
     return np.array(x_train), np.array(y_train), np.array(x_test), np.array(y_test), input_size, np.array(test_values)
 
-
-if __name__ == '__main__':
-    # get_arrows()
-    get_mnist_data(seed=6079, show=False)
-    # print(y)

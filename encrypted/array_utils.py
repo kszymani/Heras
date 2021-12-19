@@ -1,7 +1,7 @@
 from Pyfhel import Pyfhel, PyCtxt
 import numpy as np
-global REFRESHES
-REFRESHES = 0
+global refreshes
+refreshes = 0
 
 
 def encrypt_array(x: np.array, HE: Pyfhel):
@@ -28,9 +28,9 @@ def relinearize_array(x: np.array, HE: Pyfhel):
 
 
 def refresh_array(x: np.array, HE: Pyfhel):
-    global REFRESHES
-    REFRESHES += x.size
-    # print(f"refreshing array [{x.size}] noise:", x[0, 0].noiseBudget, ", total refreshes: ", REFRESHES)
+    global refreshes
+    refreshes += x.size
+    print(f"Refreshing array [{x.size}], total refreshes: {refreshes}")
     return encrypt_array(decrypt_array(x, HE), HE)
 
 

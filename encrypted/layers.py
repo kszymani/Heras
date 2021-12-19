@@ -80,11 +80,11 @@ class ExtendedActivation(Layer):
 
     def feed_forward(self, x, HE):
         self.input = refresh_array(x, HE)
-        output = self.activation(self.input, self.coeffs_map, HE)
+        output = self.activation(self.input, HE, coeffs_map=self.coeffs_map)
         return output
 
     def propagate_backward(self, output_err, lr, HE):
-        deriv = self.activation_deriv(self.input, self.coeffs_map_deriv, HE)
+        deriv = self.activation_deriv(self.input, HE, coeffs_map=self.coeffs_map_deriv)
         input_err = deriv * output_err
         input_err = refresh_array(input_err, HE)
         return input_err

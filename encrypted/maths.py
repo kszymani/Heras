@@ -15,9 +15,7 @@ def debugger(func):
             print("===================================")
             for e in zip(dec, decrypt_array(out, args[1]).flatten()):
                 print("{:s}({:.6f}) = {:.6f}".format(func.__name__, e[0], e[1]))
-                if np.abs(e[0]) > 100 or np.abs(e[1]) > 100:
-                    # since we are usually dealing with small numbers, a big number randomly showing up is a good
-                    # indicator that something went wrong
+                if np.abs(e[0]) > 10000 or np.abs(e[1]) > 10000:
                     fatal = True
             print("===================================")
             if fatal:
@@ -85,8 +83,12 @@ def sign(x, HE: Pyfhel):
 def evaluate_poly(x, a, HE: Pyfhel):
     result = np.zeros(x.size, dtype=PyCtxt)
     for i in reversed(range(len(a))):
+        # if i == len(a)//2 and i != 0:
+        #     print(i)
+        #     result = refresh_array(result, HE)
         result = (x * result) + a[i]
         relinearize_array(result, HE)
+
     result = refresh_array(result, HE)
     return result
 
@@ -140,57 +142,70 @@ def reciprocal_newton(x, HE: Pyfhel, d=4):
     return a
 
 
-def get_intervals(x, HE: Pyfhel):
-    # client zwraca klucz, w zależności od przedziału do którego należy argument
+def get_interval_id_for_sigmoid_from_client(x, HE: Pyfhel):
     args = decrypt_array(x, HE).flatten()
     res = []
     for a in args:
-        if a < -2:
+        if a < -6:
             res.append(0)
-        elif -2 < a < 2:
+        elif -6 <= a < -2:
             res.append(1)
-        else:
+        elif -2 <= a < 2:
             res.append(2)
+        elif 2 <= a < 6:
+            res.append(3)
+        else:
+            res.append(4)
     return res
 
 
-def sigmoid_extended(x, coeffs_map, HE: Pyfhel):
-    keys = get_intervals(x, HE)
+@debugger
+def sigmoid_extended(x, HE: Pyfhel, coeffs_map=None):
+    ids = get_interval_id_for_sigmoid_from_client(x, HE)
     result = np.empty(x.size, dtype=PyCtxt)
     i = 0
     for e in x.flatten():
-        result[i] = evaluate_poly(np.array([e]), coeffs_map[keys[i]], HE)[0]
+        result[i] = evaluate_poly(np.array([e]), coeffs_map[ids[i]], HE)[0]
         i += 1
     return result.reshape(x.shape)
 
 
 def get_map_sigmoid(HE):
-    c0 = [0.527847, 0.302659, 0.0334104, -0.0188185, -0.00732535, -0.00103917, -0.0000554231]
-    c1 = [1 / 2, 1 / 4, 0.0, -1 / 48, 0.0, 1 / 480, ]
-    c2 = [0.472153, 0.302659, -0.0334104, -0.0188185, 0.00732535, -0.00103917, 0.0000554231]
-    c0 = encrypt_array(np.array(c0), HE)
-    c1 = encrypt_array(np.array(c1), HE)
-    c2 = encrypt_array(np.array(c2), HE)
-    coeffs_map = {0: c0, 1: c1, 2: c2}
+    a0 = [0.000911051]  # for x < -6 sigmoid is almost flat line
+    a1 = [0.61292, 0.450853, 0.141581, 0.0235304, 0.00205323, 0.0000747067]
+    a2 = [1 / 2, 1 / 4, 0.0, -1 / 48, 0.0, 1 / 480, 0.0, -17 / 80640]
+    a3 = [0.38708, 0.450853, -0.141581, 0.0235304, -0.00205323, 0.0000747067]
+    a4 = [0.999089]
+    a0 = encrypt_array(np.array(a0), HE)
+    a1 = encrypt_array(np.array(a1), HE)
+    a2 = encrypt_array(np.array(a2), HE)
+    a3 = encrypt_array(np.array(a3), HE)
+    a4 = encrypt_array(np.array(a4), HE)
+    coeffs_map = {0: a0, 1: a1, 2: a2, 3: a3, 4: a4}
     return coeffs_map
 
 
-def sigmoid_extended_deriv(x, coeffs_map, HE: Pyfhel):
-    keys = get_intervals(x, HE)
+@debugger
+def sigmoid_extended_deriv(x, HE: Pyfhel, coeffs_map=None):
+    ids = get_interval_id_for_sigmoid_from_client(x, HE)
     result = np.empty(x.size, dtype=PyCtxt)
     i = 0
     for e in x.flatten():
-        result[i] = evaluate_poly(np.array([e]), coeffs_map[keys[i]], HE)[0]
+        result[i] = evaluate_poly(np.array([e]), coeffs_map[ids[i]], HE)[0]
         i += 1
     return result.reshape(x.shape)
 
 
 def get_map_sigmoid_deriv(HE):
-    c0 = [0.302659, 0.0668208, -0.0564554, -0.0293014, -0.00519587, -0.000332539]
-    c1 = [1 / 4, 0.0, -1 / 16, 0.0, 1 / 96]
-    c2 = [0.302659, -0.0668208, -0.0564554, 0.0293014, -0.00519587, 0.000332539]
-    c0 = encrypt_array(np.array(c0), HE)
-    c1 = encrypt_array(np.array(c1), HE)
-    c2 = encrypt_array(np.array(c2), HE)
-    coeffs_map = {0: c0, 1: c1, 2: c2}
+    a0 = [0.000910221]
+    a1 = [0.450853, 0.283162, 0.0705913, 0.00821293, 0.000373533]
+    a2 = [1 / 4, 0.0, -1 / 16, 0.0, 1 / 96, 0.0, -17 / 11520]
+    a3 = [0.450853, -0.283162, 0.0705913, -0.00821293, 0.000373533]
+    a4 = [0.000910221]
+    a0 = encrypt_array(np.array(a0), HE)
+    a1 = encrypt_array(np.array(a1), HE)
+    a2 = encrypt_array(np.array(a2), HE)
+    a3 = encrypt_array(np.array(a3), HE)
+    a4 = encrypt_array(np.array(a4), HE)
+    coeffs_map = {0: a0, 1: a1, 2: a2, 3: a3, 4: a4}
     return coeffs_map
