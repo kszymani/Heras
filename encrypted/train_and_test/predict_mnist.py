@@ -6,10 +6,10 @@ from encrypted.activations import *
 from encrypted.losses import *
 from datasets import get_mnist_data_binary
 
-HE = restore_HE_from("../keys/light")
+HE = restore_HE_from("../keys")
 
 seed = 6079
-folder_name = "mnist_extended121"
+folder_name = "mnist_parameters"
 x_train, y_train, x_test, y_test, input_size, test_values = get_mnist_data_binary(seed=seed)
 
 network = Network(seed=seed)

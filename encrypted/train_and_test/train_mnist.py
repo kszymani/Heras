@@ -11,7 +11,7 @@ from encrypted.activations import *
 from encrypted.losses import *
 from datasets import get_mnist_data_binary
 
-HE = restore_HE_from("keys")
+HE = restore_HE_from("../keys")
 # seed = random.randint(0, 10000)
 seed = 6079
 folder_name = "mnist_parameters"
