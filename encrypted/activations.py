@@ -1,3 +1,7 @@
+"""
+Kod prezentuje implementacje funkcji aktywacji.
+"""
+
 from encrypted.array_utils import relinearize_array, refresh_array, encrypt_array, decrypt_array
 from encrypted.maths import *
 
@@ -17,62 +21,16 @@ def sigmoid_deriv(x, HE):
 
 
 @debugger
-def sigmoid_scaled(x, HE):  # alpha = 1/3
-    coeffs = [1 / 2, 1 / 12, 0, -1 / 1296, 0, 1 / 116640, 0, -17 / 176359680]
-    res = evaluate_poly(x, coeffs, HE)
-    return res
-
-
-@debugger
-def sigmoid_scaled_deriv(x, HE):
-    coeffs = [1/12, 0, -1/432, 0, 1/23328, 0, -17/25194240]
-    res = evaluate_poly(x, coeffs, HE)
-    return res
-
-
-
-@debugger
-def sigmoid_squared(x, HE):
-    res = sigmoid(x, HE)
-    res = res ** 2
-    relinearize_array(res, HE)
-    return res
-
-
-@debugger
-def sigmoid_squared_deriv(x, HE):
-    sig = sigmoid(x, HE)
-    res = sigmoid_deriv(x, HE)
-    res *= sig * 2.0
-    res = refresh_array(res, HE)
-    return res
-
-
-@debugger
 def relu(x, HE):
     sqr = x ** 2
     relinearize_array(sqr, HE)
-    res = (x + sqrt_taylor(sqr, HE)) / 2.0
+    res = (x + sqrt(sqr, HE)) / 2.0
     return res
 
 
 @debugger
 def relu_deriv(x, HE):
     res = (sign(x, HE) + 1.0) / 2.0
-    return res
-
-
-@debugger
-def relu_client(x, HE):
-    dec = decrypt_array(x, HE)
-    res = encrypt_array(dec * (dec > 0), HE)
-    return res
-
-
-@debugger
-def relu_client_deriv(x, HE):
-    dec = decrypt_array(x, HE)
-    res = encrypt_array(1.0 * (dec > 0), HE)
     return res
 
 

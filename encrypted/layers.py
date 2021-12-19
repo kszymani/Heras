@@ -1,3 +1,8 @@
+"""
+Kod prezentuje implementacje warstw gęstej, aktywacyjnej oraz aktywacyjnej o rozszerzonej dziedzinie.
+Implementuje szczegóły algorytmu wstecznej propagacji błędu.
+"""
+
 import numpy as np
 
 from encrypted.array_utils import encrypt_array, relinearize_array, refresh_array

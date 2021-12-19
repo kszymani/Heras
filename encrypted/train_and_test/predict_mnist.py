@@ -4,13 +4,13 @@ from encrypted.network import Network
 from encrypted.layers import Dense, Activation, ExtendedActivation
 from encrypted.activations import *
 from encrypted.losses import *
-from datasets import get_mnist_data
+from datasets import get_mnist_data_binary
 
 HE = restore_HE_from("../keys/light")
 
 seed = 6079
 folder_name = "mnist_extended121"
-x_train, y_train, x_test, y_test, input_size, test_values = get_mnist_data(seed=seed)
+x_train, y_train, x_test, y_test, input_size, test_values = get_mnist_data_binary(seed=seed)
 
 network = Network(seed=seed)
 network.add(Dense(input_size, 10, HE, weights=f'{folder_name}/weights0.npy', bias=f'{folder_name}/bias0.npy'))

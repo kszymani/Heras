@@ -1,33 +1,33 @@
+"""
+Kod implementuje metody przybliżeń funkcji, opartych o szeregi Taylora i metody iteracyjne.
+"""
+
 from Pyfhel import Pyfhel, PyCtxt
 import numpy as np
 
 from encrypted.array_utils import relinearize_array, refresh_array, decrypt_array, encrypt_array
-
-DEBUG = True
 
 
 def debugger(func):
     def wrapper(*args, **kwargs):
         dec = decrypt_array(*args).flatten()
         out = func(*args, **kwargs)
-        if DEBUG:
-            fatal = False
-            print("===================================")
-            for e in zip(dec, decrypt_array(out, args[1]).flatten()):
-                print("{:s}({:.6f}) = {:.6f}".format(func.__name__, e[0], e[1]))
-                if np.abs(e[0]) > 10000 or np.abs(e[1]) > 10000:
-                    fatal = True
-            print("===================================")
-            if fatal:
-                print("FATAL ERROR DETECTED")
-                exit(420)
+        fatal = False
+        print("===================================")
+        for e in zip(dec, decrypt_array(out, args[1]).flatten()):
+            print("{:s}({:.6f}) = {:.6f}".format(func.__name__, e[0], e[1]))
+            if np.abs(e[0]) > 10000 or np.abs(e[1]) > 10000:
+                fatal = True
+        print("===================================")
+        if fatal:
+            print("ERROR DETECTED")
+            exit(420)
         return out
-
     return wrapper
 
 
 @debugger
-def sqrt(x, HE: Pyfhel, d=3):
+def sqrt(x, HE: Pyfhel, d=4):
     a = x
     b = x - 1.0
     for i in range(d):
@@ -83,12 +83,8 @@ def sign(x, HE: Pyfhel):
 def evaluate_poly(x, a, HE: Pyfhel):
     result = np.zeros(x.size, dtype=PyCtxt)
     for i in reversed(range(len(a))):
-        # if i == len(a)//2 and i != 0:
-        #     print(i)
-        #     result = refresh_array(result, HE)
         result = (x * result) + a[i]
         relinearize_array(result, HE)
-
     result = refresh_array(result, HE)
     return result
 
@@ -122,24 +118,6 @@ def log(x, HE: Pyfhel):
 def exp(x, HE: Pyfhel):
     coeffs = [1.0, 1.0, 1 / 2, 1 / 6, 1 / 24, 1 / 120, 1 / 720]
     return evaluate_poly(x, coeffs, HE)
-
-
-def reciprocal_newton(x, HE: Pyfhel, d=4):
-    a = np.empty(x.size, dtype=PyCtxt)
-    initial = 0.1
-    i = 0
-    for _ in x.flatten():
-        a[i] = HE.encryptFrac(initial)
-        i += 1
-    a = a.reshape(x.shape)
-    for _ in range(d):
-        t = x * a
-        relinearize_array(t, HE)
-        t = t * -1.0 + 2.0
-        a *= t
-        relinearize_array(a, HE)
-        a = refresh_array(a, HE)
-    return a
 
 
 def get_interval_id_for_sigmoid_from_client(x, HE: Pyfhel):

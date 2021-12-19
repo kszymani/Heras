@@ -9,7 +9,7 @@ from plain.activations import *
 from plain.losses import *
 
 seed = 6079
-x_train, y_train, x_test, y_test, input_size, test_values = get_mnist_data(seed=seed)
+x_train, y_train, x_test, y_test, input_size, test_values = get_mnist_data_binary(seed=seed)
 
 print("seed: ", seed)
 network = Network(seed=seed)

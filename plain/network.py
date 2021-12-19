@@ -1,3 +1,6 @@
+"""Kod prezentuje klasę Network, która jest rdzeniem systemu i implementuje algorytm wstecznej propagacji bez
+szyfrowania homomorifcznego """
+
 import os
 
 from plain.layers import Layer, Dense
@@ -45,7 +48,6 @@ class Network:
         for layer in reversed(self.layers):
             error = layer.propagate_backward(error, lr)
         return err
-
 
     def fit(self, input_data, labels, epochs=1, lr=0.1):
         num_samples = len(input_data)

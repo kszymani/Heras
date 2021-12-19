@@ -1,3 +1,8 @@
+"""
+Kod prezentuje implementacje warstw gęstej, aktywacyjnej bez szyfrowania homomorficznego.
+Implementuje szczegóły algorytmu wstecznej propagacji błędu.
+"""
+
 import numpy as np
 
 

@@ -1,3 +1,7 @@
+"""
+Kod prezentuje klasę Network, która jest rdzeniem systemu i implementuje algorytm wstecznej propagacji.
+"""
+
 import os
 from datetime import datetime
 
@@ -85,14 +89,4 @@ class Network:
                 np.save(f"{folder_name}/bias{i}.npy", decrypt_array(layer.bias, HE))
                 i += 1
         print("Network parameters saved to folder {}".format(folder_name))
-
-    def save_weights_enc(self, folder_name, HE):
-        if not os.path.exists(folder_name):
-            os.makedirs(folder_name)
-        i = 0
-        for layer in self.layers:
-            if isinstance(layer, Dense):
-                np.save(f"{folder_name}/weights{i}.npy", layer.weights)
-                np.save(f"{folder_name}/bias{i}.npy", layer.bias)
-                i += 1
 

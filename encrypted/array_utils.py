@@ -1,3 +1,7 @@
+"""
+Kod prezentuje implementacje funkcji szyfrujących, deszyfrujących, relinearyzujących i odświeżających szyfrogramy.
+"""
+
 from Pyfhel import Pyfhel, PyCtxt
 import numpy as np
 global refreshes

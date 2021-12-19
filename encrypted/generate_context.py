@@ -1,6 +1,6 @@
 """
 Kod generuje instancję kryptosystemu CKKS, jako obiekt Pyfhel.
-Zapisuje kontekst i klucze do pliów w celu szybszego tworzenia obiektu.
+Zapisuje kontekst i klucze do plików, w celu szybszego odtworzenia obiektu.
 """
 
 import os
@@ -19,7 +19,6 @@ def generate_to_folder(folder_name):
     HE = Pyfhel()
     HE.contextGen(p=p, m=m, base=b, intDigits=intDigits, fracDigits=fracDigits)
     HE.keyGen()
-    print("Generating Relin Key")
     HE.relinKeyGen(bitCount=4, size=relinKeySize)
     if not os.path.exists(folder_name):
         os.makedirs(folder_name)
@@ -27,11 +26,12 @@ def generate_to_folder(folder_name):
     HE.savepublicKey(f"{folder_name}/public")
     HE.savesecretKey(f"{folder_name}/secret")
     HE.saveContext(f"{folder_name}/context")
+    print("Saving Pyfhel keys to ", folder_name)
     HE.multDepth(max_depth=64, delta=0.5, x_y_z=(1, 0.1, 10.0), verbose=True)
 
 
 def restore_HE_from(folder_name):
-    print("Restoring Pyfhel")
+    print("Restoring Pyfhel from folder ", folder_name)
     HE = Pyfhel()
     HE.restoreContext(f"{folder_name}/context")
     HE.restoresecretKey(f"{folder_name}/secret")
@@ -41,4 +41,4 @@ def restore_HE_from(folder_name):
 
 
 if __name__ == '__main__':
-    generate_to_folder("keys/light")
+    generate_to_folder("keys")
